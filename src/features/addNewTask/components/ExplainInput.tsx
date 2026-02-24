@@ -1,4 +1,3 @@
-import React from "react";
 import { inputClass, labelClass } from "../utils/tailwindClasses";
 import type { todoInputProps } from "../types/types";
 
