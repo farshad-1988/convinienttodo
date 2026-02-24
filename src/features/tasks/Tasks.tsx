@@ -1,12 +1,17 @@
-// import { tasks } from "../data/mockdata";
-import TaskCard from "../components/TaskCard";
-import NewTaskBtn from "../components/NewTaskBtn";
 import { motion } from "framer-motion";
-import { container, item } from "../utils/framerMotion";
 import { useSelector } from "react-redux";
-import { selectAllTodos } from "../slice/todoSlice";
+import TaskCard from "./components/TaskCard";
+import NewTaskBtn from "../../shared/components/NewTaskBtn";
+import { container, item } from "../../shared/utils/framerMotion";
+import { selectAllTodos } from "../../entities/task/selectors";
+import { useAuthStorage } from "../../shared/hooks/useAuthStorage";
+
 const Tasks = () => {
+  const authuser = useAuthStorage();
   const tasks = useSelector(selectAllTodos);
+  console.log(tasks);
+  if (!authuser) return;
+  const usersTask = tasks.filter((task) => task.userId === authuser.id);
 
   return (
     <div className="flex flex-col gap-2 mb-20">
@@ -16,7 +21,7 @@ const Tasks = () => {
         animate="show"
         className="flex flex-col gap-4"
       >
-        {tasks.map((task, index) => {
+        {usersTask.map((task, index) => {
           return (
             <motion.div variants={item} key={index}>
               <TaskCard key={index} task={task} />

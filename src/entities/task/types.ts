@@ -6,4 +6,5 @@ export type Task = {
   startDate: string | null;
   dueDate: string | null;
   id: string;
+  userId: string;
 };

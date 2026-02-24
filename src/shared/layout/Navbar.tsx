@@ -1,22 +1,25 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipboardList, LogIn, LogOut } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../entities/user/userSlice";
+import { useAuthStorage } from "../hooks/useAuthStorage";
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const authuser = useAuthStorage();
   const logout = () => {
-    setIsLoggedIn(false);
+    dispatch(logoutUser());
     navigate("/");
   };
 
   return (
     <div className="flex justify-between p-4">
       <div className="flex">
-        <Link to={isLoggedIn ? "/dashboard" : "/"}>Logo</Link>
+        <Link to={authuser ? "/dashboard" : "/"}>Logo</Link>
       </div>
-      {isLoggedIn ? (
+      {authuser ? (
         <div className="flex gap-4">
-          <Link className="flex" to={"/tasks"}>
+          <Link className="flex" to={"/dashboard"}>
             tasks
             <ClipboardList />
           </Link>
@@ -32,8 +35,7 @@ const Navbar = () => {
         <button
           className="flex justify-center items-center"
           onClick={() => {
-            setIsLoggedIn(true);
-            navigate("/dashboard");
+            navigate("/login");
           }}
         >
           login

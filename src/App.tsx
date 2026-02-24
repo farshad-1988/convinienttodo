@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Dashboard from "./pages/Dashboard";
-import Tasks from "./pages/Tasks";
-import NewTask from "./pages/NewTask";
-import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Navbar from "./shared/layout/Navbar";
+import NotFound from "./shared/pages/NotFound";
+import Home from "./features/home/Home";
 import { Provider } from "react-redux";
 import { persistor, store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import Tasks from "./features/tasks/Tasks";
+import TodoForm from "./features/addNewTask/TodoForm";
+import Login from "./features/auth/login/Login";
+import Register from "./features/auth/register/Register";
 
 function App() {
   return (
@@ -19,9 +19,10 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="/new-task" element={<NewTask />} />
+              <Route path="/dashboard" element={<Tasks />} />
+              {/* <Route path="/tasks" element={<Tasks />} /> */}
+              <Route path="/new-task" element={<TodoForm />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
