@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 const Home = () => {
   const authuser = useAuthStorage();
-  console.log(authuser);
   const navigate = useNavigate();
 
   useEffect(() => {

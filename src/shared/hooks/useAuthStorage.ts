@@ -13,9 +13,10 @@ export const useAuthStorage = () => {
   useEffect(() => {
     if (authUser) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
     }
+    // else {
+    //   localStorage.removeItem(STORAGE_KEY);
+    // }
   }, [authUser]);
 
   // listen for changes made in other tabs

@@ -1,13 +1,19 @@
 import type { TaskProps } from "../types/type";
-import ModificationBtn from "./cardComps/ModificationBtn";
+import ModificationBtn from "./cardComps/ActionButton";
 import StatusSpan from "./cardComps/StatusSpan";
 import DueDate from "./cardComps/DueDate";
-import ActionBtn from "./cardComps/ActionBtn";
+import ActionBtn from "./cardComps/ToggleCompleteButton";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ task, setIsEditing, setShowDeleteConfirm }: TaskProps) => {
   const isCompleted = task.status === "completed";
+  const navigate = useNavigate();
 
-  if (!task.id) throw new Error("id is missing");
+  if (!task.id) {
+    console.log("id is missing");
+    navigate("/login");
+    return;
+  }
   return (
     <>
       {/* Top row: status badge + action buttons */}

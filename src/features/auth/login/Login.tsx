@@ -1,48 +1,16 @@
 // pages/LoginPage.tsx
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, User, LogIn } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAllUsers } from "../../../entities/user/selectors";
-import { loginUser } from "../../../entities/user/userSlice";
-
-const schema = z.object({
-  username: z.string().min(3, "At least 3 characters"),
-  password: z.string().min(6, "At least 6 characters"),
-});
-type Fields = z.infer<typeof schema>;
+import useLogin from "../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const users = useSelector(selectAllUsers);
   const [showPw, setShowPw] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<Fields>({ resolver: zodResolver(schema) });
-
-  const onSubmit = (data: Fields) => {
-    const match = users.find(
-      (u) => u.username === data.username && u.password === data.password,
-    );
-    if (!match) {
-      setError("username", { message: "Invalid username or password" });
-      return;
-    }
-    dispatch(loginUser({ id: match.id }));
-    navigate("/");
-  };
+  const { register, handleSubmit, errors } = useLogin();
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen  flex items-center justify-center p-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
       </div>
@@ -58,7 +26,7 @@ const Login = () => {
           <p className="text-sm text-slate-500 mt-0.5">Sign in to continue</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-slate-400 tracking-wide">
               Username

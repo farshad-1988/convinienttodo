@@ -1,8 +1,5 @@
 // pages/RegisterPage.tsx
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { motion } from "framer-motion";
 import {
   Eye,
@@ -12,58 +9,15 @@ import {
   UserPlus,
   HardDrive,
 } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../../../entities/user/userSlice";
-import { nanoid } from "nanoid";
-import type { User } from "../../../entities/user/types";
-import { selectAllUsers } from "../../../entities/user/selectors";
-
-const schema = z.object({
-  name: z.string().min(2, "At least 2 characters"),
-  username: z
-    .string()
-    .min(3, "At least 3 characters")
-    .regex(/^\S+$/, "No spaces allowed"),
-  password: z.string().min(6, "At least 6 characters"),
-});
-type Fields = z.infer<typeof schema>;
+import { Link } from "react-router-dom";
+import useRegister from "../hooks/useRegister";
 
 const Register = () => {
-  const users = useSelector(selectAllUsers);
-  const navigate = useNavigate();
   const [showPw, setShowPw] = useState(false);
-  const dispatch = useDispatch();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<Fields>({ resolver: zodResolver(schema) });
-
-  const onSubmit = (data: Fields) => {
-    const userData: User = {
-      ...data,
-      id: nanoid(),
-      status: "unauthenticated",
-      tasks: [],
-    };
-    const foundedUser = users.find((user) => user.username === data.username);
-    if (foundedUser) {
-      setError("username", {
-        type: "manual",
-        message: "username exists",
-      });
-      return;
-    }
-    dispatch(registerUser(userData));
-    dispatch(loginUser({ id: userData.id }));
-    navigate("/");
-  };
+  const { register, handleSubmit, errors } = useRegister();
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       </div>
@@ -81,7 +35,7 @@ const Register = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Local storage notice */}
           <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs">
             <HardDrive className="w-3.5 h-3.5 mt-0.5 shrink-0" />

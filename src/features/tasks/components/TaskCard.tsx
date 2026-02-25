@@ -29,7 +29,6 @@ const TaskCard = ({ task }: { task: Task }) => {
           setShowDeleteConfirm={setShowDeleteConfirm}
         />
       )}
-
       {/* Delete confirmation overlay */}
       <AnimatePresence>
         {showDeleteConfirm && (

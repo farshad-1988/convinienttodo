@@ -5,11 +5,16 @@ import type { TaskProps } from "../types/type";
 import { removeTodo } from "../../../entities/task/todoSlice";
 import { removeTaskIdfromUser } from "../../../entities/user/userSlice";
 import { useAuthStorage } from "../../../shared/hooks/useAuthStorage";
+import { useNavigate } from "react-router-dom";
 
 const DeleteCard = ({ task, setShowDeleteConfirm }: TaskProps) => {
   const authuser = useAuthStorage();
   const dispatch = useDispatch();
-  if (!authuser) return;
+  const navigate = useNavigate();
+  if (!authuser) {
+    navigate("/login");
+    return;
+  }
   return (
     <motion.div
       className="absolute inset-0 bg-slate-900/95 rounded-2xl flex flex-col items-center justify-center gap-4 z-20 p-6"

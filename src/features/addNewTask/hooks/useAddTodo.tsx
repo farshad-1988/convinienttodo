@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getDefaults } from "../utils/helperFunctions";
@@ -11,6 +11,13 @@ import { taskSchema } from "../schemas/taskSchema";
 import { nanoid } from "nanoid";
 import { useAuthStorage } from "../../../shared/hooks/useAuthStorage";
 import { addTaskIdToUser } from "../../../entities/user/userSlice";
+import { useEffect } from "react";
+
+const subjectMap: Record<string, string> = {
+  programing: "Node, JS, React, Vue",
+  design: "Figma, UI, UX",
+  devops: "Docker, CI/CD, AWS",
+};
 
 const useAddTodo = () => {
   const navigate = useNavigate();
@@ -21,6 +28,8 @@ const useAddTodo = () => {
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
+    control,
   } = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(taskSchema),
@@ -31,6 +40,17 @@ const useAddTodo = () => {
       explain: "",
     },
   });
+
+  const subject = useWatch({
+    control,
+    name: "subject",
+  });
+
+  useEffect(() => {
+    if (subject === "programing") {
+      setValue("explain", subjectMap[subject], { shouldValidate: true });
+    }
+  }, [setValue, subject]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     subject,

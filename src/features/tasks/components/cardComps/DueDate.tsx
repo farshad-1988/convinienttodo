@@ -1,19 +1,16 @@
 import { Calendar, CalendarClock } from "lucide-react";
 import { motion } from "framer-motion";
-import { expandTodo } from "../../../../entities/task/todoSlice";
 import type { Task } from "../../../../entities/task/types";
 import { useDispatch } from "react-redux";
-import { formatDueDate } from "../../utils/helperFunctions";
+import {
+  formatDueDate,
+  getDueDate,
+  handleExtendToEndOfDay,
+} from "../../utils/helperFunctions";
 
 const DueDate = ({ task }: { task: Partial<Task> }) => {
-  const now = new Date();
-  const dueDate = task.dueDate ? new Date(task.dueDate) : null;
-  const isOverdue = dueDate && task.status !== "completed" && dueDate < now;
+  const { dueDate, isOverdue } = getDueDate({ task });
   const dispatch = useDispatch();
-  const handleExtendToEndOfDay = () => {
-    if (!task.id) throw new Error("Task ID is missing");
-    dispatch(expandTodo(task.id));
-  };
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <div
@@ -33,8 +30,8 @@ const DueDate = ({ task }: { task: Partial<Task> }) => {
       {isOverdue && (
         <motion.button
           onClick={(e) => {
-            e.stopPropagation();
-            handleExtendToEndOfDay();
+            if (!task.id) return;
+            handleExtendToEndOfDay({ e, dispatch, id: task.id });
           }}
           className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300 border border-amber-500/30 transition-colors font-medium"
           whileTap={{ scale: 0.95 }}
