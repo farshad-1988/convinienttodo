@@ -17,7 +17,7 @@ const Register = () => {
   const { register, handleSubmit, errors } = useRegister();
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-[85vh] flex items-center justify-center p-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       </div>

@@ -6,12 +6,12 @@ const NewTaskBtn = () => {
   const controls = useAnimation();
 
   const handleClick = async () => {
+    navigate("/new-task");
     await controls.start({
       scale: [1, 0.88, 1.08, 1],
       rotate: [0, 90],
       transition: { duration: 0.35, ease: "easeInOut" },
     });
-    navigate("/new-task");
   };
 
   return (
