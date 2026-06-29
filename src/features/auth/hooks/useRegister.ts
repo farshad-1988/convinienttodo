@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectAllUsers } from "../../../entities/user/selectors";
 import { nanoid } from "nanoid";
+import { hashPassword } from "../../../shared/utils/helperFunction";
 
 const useRegister = () => {
   const users = useSelector(selectAllUsers);
@@ -20,9 +21,11 @@ const useRegister = () => {
     setError,
   } = useForm<RegisterFields>({ resolver: zodResolver(registerSchema) });
 
-  const onSubmit = (data: RegisterFields) => {
+  const onSubmit = async (data: RegisterFields) => {
+    const hashedPassword = await hashPassword(data.password);
     const userData: User = {
       ...data,
+      password: hashedPassword,
       id: nanoid(),
       status: "unauthenticated",
       tasks: [],
