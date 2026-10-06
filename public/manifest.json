@@ -1,7 +1,7 @@
 {
   "name": "Convenient Todo App",
   "short_name": "Todo",
-  "description": "A convenient todo app to manage your tasks",
+  "description": "Offline task manager that stores tasks in the browser.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

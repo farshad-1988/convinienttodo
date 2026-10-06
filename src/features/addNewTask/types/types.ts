@@ -5,6 +5,12 @@ import type z from "zod";
 export type Inputs = z.infer<typeof taskSchema>;
 
 export type todoInputProps = {
-  error: string;
+  error?: string;
   register: UseFormRegister<Inputs>;
+};
+
+export type dateInputProps = {
+  register: UseFormRegister<Inputs>;
+  startDateError?: string;
+  dueDateError?: string;
 };

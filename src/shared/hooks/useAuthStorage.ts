@@ -1,35 +1,32 @@
-// src/shared/hooks/useSyncAuthUser.ts
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAllUsers } from "../../entities/user/selectors";
+import { logoutUser } from "../../entities/user/userSlice";
 
 const STORAGE_KEY = "auth_user";
 
 export const useAuthStorage = () => {
+  const dispatch = useDispatch();
   const allUsers = useSelector(selectAllUsers);
-  const authUser = allUsers.find((u) => u.status === "authenticated") ?? null;
+  const authUser = allUsers.find((user) => user.status === "authenticated") ?? null;
 
-  // sync to localStorage whenever the authenticated user changes
   useEffect(() => {
     if (authUser) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: authUser.id }));
+      return;
     }
-    // else {
-    //   localStorage.removeItem(STORAGE_KEY);
-    // }
+    localStorage.removeItem(STORAGE_KEY);
   }, [authUser]);
 
-  // listen for changes made in other tabs
   useEffect(() => {
-    const handleStorageEvent = (e: StorageEvent) => {
-      if (e.key !== STORAGE_KEY) return;
-      // other tab logged out
-      if (!e.newValue) window.location.href = "/login";
+    const handleStorageEvent = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY || event.newValue) return;
+      dispatch(logoutUser());
     };
 
     window.addEventListener("storage", handleStorageEvent);
     return () => window.removeEventListener("storage", handleStorageEvent);
-  }, []);
+  }, [dispatch]);
 
   return authUser;
 };

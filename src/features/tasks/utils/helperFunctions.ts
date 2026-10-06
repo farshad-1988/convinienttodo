@@ -4,14 +4,11 @@ import {
   undoComplete,
 } from "../../../entities/task/todoSlice";
 import type { Task } from "../../../entities/task/types";
+import {
+  formatStoredDate,
+  isBeforeToday,
+} from "../../../shared/utils/helperFunction";
 import type { OnCompleteFunctionProps } from "../types/type";
-
-export const formatDueDate = (date: Date) =>
-  date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
 
 export const handleUndoComplete = ({
   dispatch,
@@ -34,11 +31,12 @@ export const handleComplete = ({
 };
 
 export function getDueDate({ task }: { task: Partial<Task> }) {
-  const now = new Date();
-  const dueDate = task.dueDate ? new Date(task.dueDate) : null;
-  const isOverdue = dueDate && task.status !== "completed" && dueDate < now;
+  const dueLabel = task.dueDate ? formatStoredDate(task.dueDate) : null;
+  const isOverdue = Boolean(
+    task.dueDate && task.status !== "completed" && isBeforeToday(task.dueDate),
+  );
 
-  return { dueDate, isOverdue };
+  return { dueLabel, isOverdue };
 }
 
 export const handleExtendToEndOfDay = ({

@@ -49,7 +49,8 @@ const NewTaskBtn = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.92 }}
         onClick={handleClick}
-        className="pointer-events-auto relative flex items-center justify-center cursor-pointer"
+        type="button"
+        className="pointer-events-auto relative flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
         style={{
           width: 58,
           height: 58,

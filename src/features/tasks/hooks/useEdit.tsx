@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import type { Inputs, TaskProps } from "../types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editTodo } from "../../../entities/task/todoSlice";
+import { calendarDate } from "../../../shared/utils/helperFunction";
 import { taskSchema } from "../schemas/schemas";
 
 const useEdit = ({ task, setIsEditing }: TaskProps) => {
@@ -16,7 +17,7 @@ const useEdit = ({ task, setIsEditing }: TaskProps) => {
     defaultValues: {
       subject: task.subject ?? "",
       explain: task.explain ?? "",
-      dueDate: task.dueDate ?? "",
+      dueDate: task.dueDate ? (calendarDate(task.dueDate) ?? "") : "",
     },
   });
   const dispatch = useDispatch();
@@ -28,9 +29,7 @@ const useEdit = ({ task, setIsEditing }: TaskProps) => {
         changes: {
           subject: inputs.subject,
           explain: inputs.explain,
-          dueDate: inputs.dueDate
-            ? new Date(inputs.dueDate).toISOString()
-            : null,
+          dueDate: calendarDate(inputs.dueDate),
         },
       }),
     );

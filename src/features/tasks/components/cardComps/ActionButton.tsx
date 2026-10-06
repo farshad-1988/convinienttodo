@@ -12,9 +12,10 @@ const ModificationBtn = ({
           e.stopPropagation();
           setIsEditing?.(true);
         }}
-        className="p-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 hover:text-blue-300 transition-colors"
+        type="button"
+        className="p-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
         whileTap={{ scale: 0.9 }}
-        title="Edit"
+        aria-label="Edit task"
       >
         <Pencil className="w-3.5 h-3.5" />
       </motion.button>
@@ -23,9 +24,10 @@ const ModificationBtn = ({
           e.stopPropagation();
           setShowDeleteConfirm?.(true);
         }}
-        className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-red-300 transition-colors"
+        type="button"
+        className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-red-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
         whileTap={{ scale: 0.9 }}
-        title="Delete"
+        aria-label="Delete task"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </motion.button>

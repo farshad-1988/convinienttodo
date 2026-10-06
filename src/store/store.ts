@@ -2,7 +2,16 @@ import { configureStore, type EntityState } from "@reduxjs/toolkit";
 import todosReducer from "../entities/task/todoSlice";
 import usersReducer from "../entities/user/userSlice";
 import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from "redux-persist";
 import type { Task } from "../entities/task/types";
 import type { User } from "../entities/user/types";
 
@@ -25,7 +34,9 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     }),
 });
 

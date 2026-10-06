@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStorage } from "../../shared/hooks/useAuthStorage";
 import { useEffect } from "react";
 
@@ -8,15 +8,17 @@ const Home = () => {
 
   useEffect(() => {
     if (authuser) {
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
-    return;
   }, [authuser, navigate]);
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center">
+    <section className="min-h-[85vh] flex items-center justify-center">
       <div className="text-center max-w-md px-6">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-600 mb-6 shadow-lg">
+        <div
+          className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-600 mb-6 shadow-lg"
+          aria-hidden="true"
+        >
           <svg
             className="w-7 h-7 text-white"
             fill="none"
@@ -44,11 +46,22 @@ const Home = () => {
           No server, no sync — your data stays on this machine.
         </p>
 
-        <p className="text-sm text-slate-400">
-          Register and Login to access your dashboard and start managing tasks.
-        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            to="/register"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            Create account
+          </Link>
+          <Link
+            to="/login"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/30 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          >
+            Sign in
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

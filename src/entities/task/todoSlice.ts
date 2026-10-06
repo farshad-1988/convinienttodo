@@ -43,12 +43,9 @@ export const todoSlice = createSlice({
       const todo = state.entities[action.payload];
       if (!todo) return;
 
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
       todosAdapter.updateOne(state, {
         id: action.payload,
-        changes: { dueDate: toLocalDateString(tomorrow) },
+        changes: { dueDate: toLocalDateString(new Date()) },
       });
     },
   },

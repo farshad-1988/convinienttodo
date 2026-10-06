@@ -14,39 +14,21 @@ export const userSlice = createSlice({
     registerUser: usersAdaptor.addOne,
     addTaskIdToUser(
       state,
-      { payload }: PayloadAction<{ taskId: string; authuser: User }>,
+      { payload }: PayloadAction<{ taskId: string; userId: string }>,
     ) {
-      const { taskId, authuser } = payload;
-      usersAdaptor.updateOne(state, {
-        id: authuser.id,
-        changes: {
-          tasks: [...authuser.tasks, taskId],
-        },
-      });
+      const user = state.entities[payload.userId];
+      if (!user || user.tasks.includes(payload.taskId)) return;
+      user.tasks.push(payload.taskId);
     },
     removeTaskIdfromUser(
       state,
-      { payload }: PayloadAction<{ taskId: string; authuser: User }>,
+      { payload }: PayloadAction<{ taskId: string; userId: string }>,
     ) {
-      const { taskId, authuser } = payload;
-      usersAdaptor.updateOne(state, {
-        id: authuser.id,
-        changes: {
-          tasks: authuser.tasks.filter((id) => id !== taskId),
-        },
-      });
+      const user = state.entities[payload.userId];
+      if (!user) return;
+      user.tasks = user.tasks.filter((id) => id !== payload.taskId);
     },
     loginUser(state, { payload }: PayloadAction<{ id: string }>) {
-      //   const foundUser = Object.values(state.entities).find(
-      //     (user) => user.username === username,
-      //   );
-      //   if (!foundUser) {
-      //     throw new Error("user with this username is not exists");
-      //   }
-      //   const match = foundUser.password === password;
-      //   if (!match) {
-      //     throw new Error("password is incorrect");
-      //   }
       usersAdaptor.updateMany(
         state,
         state.ids.map((id) => ({ id, changes: { status: "unauthenticated" } })),
