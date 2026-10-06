@@ -40,7 +40,7 @@ const useRegister = () => {
     }
     dispatch(registerUser(userData));
     dispatch(loginUser({ id: userData.id }));
-    navigate("/");
+    navigate("/dashboard", { replace: true });
   };
   const submitfunc = handleSubmit(onSubmit);
   return { handleSubmit: submitfunc, register, errors };

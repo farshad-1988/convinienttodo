@@ -3,13 +3,12 @@ import { motion } from "framer-motion";
 import type { Task } from "../../../../entities/task/types";
 import { useDispatch } from "react-redux";
 import {
-  formatDueDate,
   getDueDate,
   handleExtendToEndOfDay,
 } from "../../utils/helperFunctions";
 
 const DueDate = ({ task }: { task: Partial<Task> }) => {
-  const { dueDate, isOverdue } = getDueDate({ task });
+  const { dueLabel, isOverdue } = getDueDate({ task });
   const dispatch = useDispatch();
   return (
     <div className="flex items-center gap-2 flex-wrap">
@@ -20,10 +19,11 @@ const DueDate = ({ task }: { task: Partial<Task> }) => {
             : "bg-slate-700/60 text-slate-400"
         }`}
       >
-        <Calendar className="w-3.5 h-3.5" />
+        <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
         <span>
-          {isOverdue ? "Overdue · " : "Due · "}
-          {dueDate && formatDueDate(dueDate)}
+          {dueLabel
+            ? `${isOverdue ? "Overdue" : "Due"} · ${dueLabel}`
+            : "No due date"}
         </span>
       </div>
 
@@ -33,7 +33,8 @@ const DueDate = ({ task }: { task: Partial<Task> }) => {
             if (!task.id) return;
             handleExtendToEndOfDay({ e, dispatch, id: task.id });
           }}
-          className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300 border border-amber-500/30 transition-colors font-medium"
+          type="button"
+          className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300 border border-amber-500/30 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           whileTap={{ scale: 0.95 }}
           title="Extend due date to end of today"
         >

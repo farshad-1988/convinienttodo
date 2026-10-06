@@ -1,52 +1,3 @@
-// import { Link, useNavigate } from "react-router-dom";
-// import { ClipboardList, LogIn, LogOut } from "lucide-react";
-// import { useDispatch } from "react-redux";
-// import { logoutUser } from "../../entities/user/userSlice";
-// import { useAuthStorage } from "../hooks/useAuthStorage";
-// const Navbar = () => {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-//   const authuser = useAuthStorage();
-//   const logout = () => {
-//     dispatch(logoutUser());
-//     navigate("/");
-//   };
-
-//   return (
-//     <>
-//       {" "}
-//       {authuser ? (
-//         <div className="flex justify-center p-4">
-//           <div className="w-full flex justify-between gap-4">
-//             <Link className="flex" to={"/dashboard"}>
-//               tasks
-//               <ClipboardList />
-//             </Link>
-//             <button
-//               className="flex justify-center items-center"
-//               onClick={() => logout()}
-//             >
-//               Logout
-//               <LogOut />
-//             </button>
-//           </div>
-//         </div>
-//       ) : (
-//         <button
-//           className="flex justify-center items-center self-center w-full text-green-600"
-//           onClick={() => {
-//             navigate("/login");
-//           }}
-//         >
-//           login
-//           <LogIn />
-//         </button>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Navbar;
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ClipboardList, LogIn, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
@@ -67,10 +18,11 @@ const Navbar = () => {
 
   if (location.pathname === "/register" || location.pathname === "/login") {
     return (
-      <header className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <header className="flex items-center justify-between gap-3 px-2 sm:px-6 py-4 border-b border-slate-700/60">
         <button
+          type="button"
           onClick={() => navigate("/")}
-          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-100 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded"
         >
           <svg
             className="w-4 h-4"
@@ -78,6 +30,7 @@ const Navbar = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2}
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -88,49 +41,51 @@ const Navbar = () => {
           Home
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-green-600">
-            Convinient Todo
-          </span>
-        </div>
+        <Link to="/" className="text-sm font-semibold text-green-600">
+          Convinient Todo
+        </Link>
 
-        <div className="w-16 text-right">
-          <span className="text-xs text-slate-400">
-            {location.pathname === "/register" ? "Register" : "Login"}
-          </span>
-        </div>
+        <p className="w-16 text-right text-xs text-slate-400">
+          {location.pathname === "/register" ? "Register" : "Login"}
+        </p>
       </header>
     );
   }
 
   return (
-    <>
+    <header className="py-4">
       {authuser ? (
-        <div className="flex justify-center p-4">
-          <div className="w-full flex justify-between gap-4">
-            <Link className="flex" to={"/dashboard"}>
-              tasks
-              <ClipboardList />
-            </Link>
-            <button
-              className="flex justify-center items-center"
-              onClick={() => logout()}
-            >
-              Logout
-              <LogOut />
-            </button>
-          </div>
-        </div>
+        <nav className="flex items-center justify-between gap-3" aria-label="Account">
+          <Link
+            className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded px-1 py-1"
+            to="/dashboard"
+            aria-current={location.pathname === "/dashboard" ? "page" : undefined}
+          >
+            Tasks
+            <ClipboardList className="w-4 h-4" aria-hidden="true" />
+          </Link>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-slate-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded px-1 py-1"
+            onClick={logout}
+          >
+            Logout
+            <LogOut className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </nav>
       ) : (
-        <button
-          className="flex justify-center mt-6 items-center self-center w-full text-green-600"
-          onClick={() => navigate("/login")}
-        >
-          login
-          <LogIn />
-        </button>
+        <nav className="flex justify-center" aria-label="Account">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-green-600 hover:text-green-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded px-2 py-1"
+            onClick={() => navigate("/login")}
+          >
+            Log in
+            <LogIn className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </nav>
       )}
-    </>
+    </header>
   );
 };
 

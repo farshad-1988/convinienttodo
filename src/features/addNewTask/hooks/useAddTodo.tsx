@@ -47,8 +47,9 @@ const useAddTodo = () => {
   });
 
   useEffect(() => {
-    if (subject === "programing") {
-      setValue("explain", subjectMap[subject], { shouldValidate: true });
+    const preset = subjectMap[subject];
+    if (preset) {
+      setValue("explain", preset, { shouldValidate: true });
     }
   }, [setValue, subject]);
 
@@ -69,16 +70,16 @@ const useAddTodo = () => {
       id: nanoid(),
       subject,
       explain,
-      startDate: startDate ? new Date(startDate).toISOString() : null,
-      dueDate: dueDate ? new Date(dueDate).toISOString() : null,
-      dateCreated: new Date(),
+      startDate: startDate || null,
+      dueDate: dueDate || null,
+      dateCreated: new Date().toISOString(),
       status: "pending",
       userId: authuser.id,
     };
 
     try {
       dispatch(addTodo(todoData));
-      dispatch(addTaskIdToUser({ taskId: todoData.id, authuser }));
+      dispatch(addTaskIdToUser({ taskId: todoData.id, userId: authuser.id }));
       navigate("/dashboard");
     } catch (error) {
       console.error(error);

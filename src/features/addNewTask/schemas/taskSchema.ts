@@ -1,13 +1,17 @@
 import z from "zod";
-// title : program
-// explain: node , js , react , vue
-//context react hook form, and controller
+
+const dateField = (label: string) =>
+  z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, `${label} is required`);
+
 export const taskSchema = z.object({
-  subject: z.string().min(1, "subject is required").max(100),
+  subject: z.string().trim().min(1, "Subject is required").max(100),
   explain: z
     .string()
-    .min(3, "explaination is required")
-    .max(1000, "more than 1000 letter is not allowed"),
-  startDate: z.string().min(1, "Start date is required"),
-  dueDate: z.string().min(1, "Due date is required"),
+    .trim()
+    .min(3, "Explanation is required")
+    .max(1000, "Explanation must be 1000 characters or fewer"),
+  startDate: dateField("Start date"),
+  dueDate: dateField("Due date"),
 });
